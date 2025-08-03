@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import home from '../views/Home.vue'
 import bmi from '../views/Bmi.vue'
-
 const routes = [
   {
     path: '/',
@@ -12,14 +12,14 @@ const routes = [
     component: bmi
   },
   {
-    path: '/test2',
-    name: 'Test2',
-    component: () => import('../views/Test2.vue')
+    path: '/Week1-1',
+    name: 'Week1-1',
+    component: () => import('../views/Week1-1.vue')
   },
   {
-    path: '/test3',
-    name: 'Test3',
-    component: () => import('../views/Test3.vue')
+    path: '/Week1-2',
+    name: 'Week1-2',
+    component: () => import('../views/Week1-2.vue')
   },
   // {
   //   path: '*',

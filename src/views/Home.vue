@@ -1,0 +1,12 @@
+<template>
+  <div>
+    <h1>Home</h1>
+    <p>Home component</p>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Home'
+}
+</script>

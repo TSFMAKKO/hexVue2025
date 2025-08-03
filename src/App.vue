@@ -8,8 +8,8 @@
     <nav>
       <router-link to="/">Home</router-link>
       <router-link to="/bmi">Bmi</router-link>
-      <router-link to="/test2">Test 2</router-link>
-      <router-link to="/test3">Test 3</router-link>
+      <router-link to="/Week1-1">Week1-1</router-link>
+      <router-link to="/Week1-2">Week1-2</router-link>
     </nav>
     <router-view></router-view>
  
