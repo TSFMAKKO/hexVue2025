@@ -123,10 +123,6 @@ h2 {
 input {
     color: black;
 }
-
-
-
-
 </style>
 
 <template>
@@ -218,6 +214,15 @@ const register = () => {
         return res.json()
     }).then(data => {
         console.log(data);
+        // alert("註冊成功")
+        if (data.status) {
+            alert(`註冊成功 ${data.uid}`)
+        } else {
+            alert(`註冊失敗${data.message}`)
+        }
+    }).catch(e => {
+        alert(`註冊失敗`)
+
     })
 
 }
@@ -229,8 +234,10 @@ const login = async () => {
         "password": password.value
     })
 
+    console.log("res:",res.data);
     const token = res.data.token
     console.log(token);
+    alert(`${res.data.nickname} 登入成功`)
 
     // 把token存入cookie 並設定日期
     document.cookie = `token=${token}; expires=${new Date(Date.now() + 3600 * 1000).toUTCString()}; path=/`;
@@ -239,35 +246,32 @@ const login = async () => {
 const logout = async () => {
     console.log("logout");
     // 檢查cookie有沒有token
-    const tokenCookie = document.cookie.split(';').find(row => row.trim().startsWith('token='));
-    if (!tokenCookie) {
-        console.log("找不到 token，可能已經登出");
-        router.push("/");
-        // return;
-    }
-    const token = tokenCookie.split('=')[1];
-    if (token) {
-        console.log("token exists:", token);
-    }
     // const token2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiItT1hYQzBRZUp2c0U0SmlLVzRMTCIsIm5pY2tuYW1lIjoiZXhhbXBsZSIsImlhdCI6MTc1NTA2OTMyMSwiZXhwIjoxNzU1MzI4NTIxfQ.Gaz47oGmBZKhvNW435EhZHbNWlWCLvT8Qb4IuvQSh5A"
     try {
+        // 抓不到token也會跳catch
+        const tokenCookie = document.cookie.split(';').find(row => row.trim().startsWith('token='));
+        const token = tokenCookie.split('=')[1];
+        console.log("token exists:", token);
+
         const res = await axios.post(baseApiUrl + "/users/sign_out", {}, {
             headers: {
                 "Authorization": `${token}`
             }
         })
-        console.log(res);
+        // console.log(res);
         console.log("res.data:", res.data);
         // 登出成功後清除 cookie
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
         router.push("/");
+
     } catch (error) {
+        alert(`登出失敗${error.data}`)
         console.log("登出失敗", error);
         // 如果是 401 未授權錯誤，也清除 cookie 並重導向
-        if (error.response && error.response.status === 401) {
-            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-            router.push("/");
-        }
+        // if (error.response && error.response.status === 401) {
+        // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        // router.push("/");
+        // }
 
 
     }
@@ -280,10 +284,9 @@ const checkOnline = async () => {
     console.log("checkOnline");
     try {
         // 檢查cookie有沒有token
-        let cookies = document.cookie.split(';')
+        const cookies = document.cookie.split(';')
         console.log("cookies:", cookies);
-
-        let token = cookies.find(row => row.trim().startsWith('token=')).split('=')[1];
+        const token = cookies.find(row => row.trim().startsWith('token=')).split('=')[1];
 
         if (token) {
             console.log("token exists:", token);
