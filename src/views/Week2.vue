@@ -98,23 +98,35 @@ const login = async () => {
 const logout = async () => {
     console.log("logout");
     // 檢查cookie有沒有token
-    const token = document.cookie.split(';').find(row => row.trim().startsWith('token=')).split('=')[1];
+    const tokenCookie = document.cookie.split(';').find(row => row.trim().startsWith('token='));
+    if (!tokenCookie) {
+        console.log("找不到 token，可能已經登出");
+        router.push("/");
+        return;
+    }
+    const token = tokenCookie.split('=')[1];
     if (token) {
         console.log("token exists:", token);
     }
     // const token2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiItT1hYQzBRZUp2c0U0SmlLVzRMTCIsIm5pY2tuYW1lIjoiZXhhbXBsZSIsImlhdCI6MTc1NTA2OTMyMSwiZXhwIjoxNzU1MzI4NTIxfQ.Gaz47oGmBZKhvNW435EhZHbNWlWCLvT8Qb4IuvQSh5A"
     try {
-        const res = await axios.post(baseApiUrl + "/users/sign_out", {
+        const res = await axios.post(baseApiUrl + "/users/sign_out", {}, {
             headers: {
                 "Authorization": `${token}`
             }
         })
         console.log(res);
         console.log("res.data:", res.data);
+        // 登出成功後清除 cookie
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        router.push("/");
     } catch (error) {
-        // 跳到其他頁面
-        // router.push("/")
-        console.log("登出失敗",error);
+        console.log("登出失敗", error);
+        // 如果是 401 未授權錯誤，也清除 cookie 並重導向
+        if (error.response && error.response.status === 401) {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            router.push("/");
+        }
 
 
     }
