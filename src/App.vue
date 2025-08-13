@@ -10,6 +10,7 @@
       <router-link to="/bmi">Bmi</router-link>
       <router-link to="/Week1-1">Week1-1</router-link>
       <router-link to="/Week1-2">Week1-2</router-link>
+      <router-link to="/Week2">Week2</router-link>
     </nav>
     <router-view></router-view>
  

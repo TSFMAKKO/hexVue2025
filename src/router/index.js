@@ -4,7 +4,8 @@ import bmi from '../views/Bmi.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home'
+    name: 'Home',
+    component: home
   },
   {
     path: '/bmi',
@@ -21,15 +22,22 @@ const routes = [
     name: 'Week1-2',
     component: () => import('../views/Week1-2.vue')
   },
-  // {
-  //   path: '*',
-  //   name: '404',
-  //   component: () => import('../404.vue')
-  // }
+  {
+    path: '/Week2',
+    name: 'Week2',
+    component: () => import('../views/Week2.vue')
+  },
+  {
+    path: '/debug',
+    name: 'debug',
+    component: () => import('../views/debug.vue')
+  },
+  { path: '/:catchAll(.*)', redirect: '/' } // 加這行防止 404
+ 
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/hexVue2025/'),
   routes
 })
 

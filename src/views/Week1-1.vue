@@ -111,6 +111,10 @@ const data = ref([
   }
 ]);
 
+data.value = data.value.map(item => {
+  return { ...item, Edit: item.Edit || false }
+})
+
 
 function handleDrinkStock(id, stock) {
   data.value.map(itme => {
