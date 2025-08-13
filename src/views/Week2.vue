@@ -162,18 +162,29 @@ input {
                 <button @click="login">登入</button>
             </div>
         </div>
-
-        <div class="section">
+        {{ todos }}
+        <div class="section btn-group">
             <!-- <h2>驗證是否在線上</h2> -->
             <!-- <div class="form-group">
                 <div class="input-group"> -->
             <!-- <label for="token">Token:</label> -->
             <!-- <input type="text" id="token" placeholder="驗證 Token"> -->
             <!-- </div> -->
-            <button @click="checkOnline">驗證是否在線上</button>
+            <button @click="checkOnline">驗證是否在線上(一定要按)</button>
             <button @click="logout" class="logout-btn">登出</button>
+            <button @click="getAllData" class="btn">取得所有資料</button>
+            新增資料: <input type="text" v-model="createText" @keypress.enter="createData">
+            <!-- getAllData -->
             <!-- </div> -->
         </div>
+
+
+        <template v-for="todo in todos">
+            <input type="checkbox" :checked="todo.status" @click="toggle(todo.id, $event)">
+            <input type="text" :value="todo.content" @keypress.enter="updateText(todo.id, $event)">
+            <button type="button" @click="deleteHandler(todo.id)">刪除</button>
+        </template>
+
 
         <!-- <div class="section">
             <h2>登出</h2>
@@ -194,6 +205,11 @@ const router = useRouter();
 const email = ref("example333@gmail.com")
 const password = ref("example")
 const nickname = ref("example333")
+const token = ref("")
+const todos = ref([])
+const createText = ref("")
+
+
 
 
 const baseApiUrl = "https://todolist-api.hexschool.io"
@@ -234,13 +250,14 @@ const login = async () => {
         "password": password.value
     })
 
-    console.log("res:",res.data);
+    console.log("res:", res.data);
     const token = res.data.token
     console.log(token);
     alert(`${res.data.nickname} 登入成功`)
 
     // 把token存入cookie 並設定日期
     document.cookie = `token=${token}; expires=${new Date(Date.now() + 3600 * 1000).toUTCString()}; path=/`;
+
 }
 
 const logout = async () => {
@@ -286,17 +303,19 @@ const checkOnline = async () => {
         // 檢查cookie有沒有token
         const cookies = document.cookie.split(';')
         console.log("cookies:", cookies);
-        const token = cookies.find(row => row.trim().startsWith('token=')).split('=')[1];
+        token.value = cookies.find(row => row.trim().startsWith('token=')).split('=')[1];
+        // token.value = token
 
-        if (token) {
-            console.log("token exists:", token);
+        if (token.value) {
+            console.log("token exists:", token.value);
         }
 
         const res = await axios.get(baseApiUrl + "/users/checkout", {
             headers: {
-                "Authorization": `${token}`
+                "Authorization": `${token.value}`
             }
         })
+
 
         console.log(res);
         alert(`${res.data.nickname} 在線上`)
@@ -309,6 +328,174 @@ const checkOnline = async () => {
 
 
 
+}
+
+// // {
+//   "status": true,
+//   "data": [
+//     {
+//       "id": "123456789",
+//       "createTime": 1620281234,
+//       "content": "買晚餐",
+//       "status": false
+//     }
+//   ]
+// }
+
+const getAllData = async () => {
+    console.log("token:", token.value);
+
+    const res = await axios.get(baseApiUrl + "/todos/", {
+        headers: {
+            "Authorization": `${token.value}`
+        }
+    })
+
+    console.log(res.data);
+    todos.value = res.data.data
+}
+
+// getAllData()
+// /todos/{id}/toggle
+const toggle = async (id, event) => {
+    console.log("id:", id);
+    const api = `${baseApiUrl}/todos/${id}/toggle`
+    console.log(api);
+
+    try {
+        const res = await axios.patch(api, {}, {
+            headers: {
+                "Authorization": `${token.value}`
+            }
+        })
+
+        todos.value.map(todo => {
+            if (todo.id === id) {
+                todo.status = !todo.status
+            }
+            return todo
+        })
+
+        console.log(res.data);
+    } catch (error) {
+        // 更新失敗把值回寫
+        let status = null
+        todos.value.forEach(todo => {
+            if (todo.id === id) {
+                status = todo.status
+            }
+        })
+        console.log("status", status);
+
+        // 把值回寫
+        event.target.checked = status
+    }
+
+
+
+    console.log(todos.value);
+
+    // todos.value = res.data.data
+}
+
+// updateText
+const updateText = async (id, event) => {
+    console.log("updateText", "id:", id);
+    const newContent = event.target.value;
+    const api = `${baseApiUrl}/todos/${id}`
+    console.log(api);
+
+    // 進動畫
+    try {
+        const res = await axios.put(api, {
+            "content": newContent
+        }, {
+            headers: {
+                "Authorization": `${token.value}`
+            }
+        })
+        if (res.status) {
+            todos.value.map(todo => {
+                if (todo.id === id) {
+                    todo.content = newContent
+                }
+                return todo
+            })
+        }
+        console.log(res.data);
+
+    } catch (error) {
+        // 假如更新失敗 
+        let content = ""
+        todos.value.forEach(todo => {
+            if (todo.id === id) {
+                content = todo.content
+            }
+        })
+        // 把值回寫
+        event.target.value = content
+    }
+
+    // 
+
+
+    // 退動畫
+
+
+    console.log(todos.value);
+
+    // todos.value = res.data.data
+}
+
+
+const createData = async () => {
+
+    const api = `${baseApiUrl}/todos/`
+    console.log(api);
+    const res = await axios.post(api, {
+        "content": createText.value
+    }, {
+        headers: {
+            "Authorization": `${token.value}`
+        }
+    })
+
+    console.log(res);
+
+
+    if (res.status) {
+        todos.value.push(res.data.newTodo)
+    }
+}
+
+const deleteHandler = async (id) => {
+    console.log("id:", id);
+    const api = `${baseApiUrl}/todos/${id}`
+    console.log(api);
+
+    try {
+        const res = await axios.delete(api, {
+            headers: {
+                "Authorization": `${token.value}`
+            }
+        })
+
+        todos.value = todos.value.filter(todo => {
+            if (todo.id != id) {
+                return todo
+            }
+        })
+
+        console.log(res.data);
+    } catch (error) {
+        // 更新失敗 不用該改
+    }
+
+
+
+    console.log(todos.value);
+
+    // todos.value = res.data.data
 }
 
 </script>
