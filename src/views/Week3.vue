@@ -1,6 +1,13 @@
 <style></style>
 <template>
     <h3>餐點購買</h3>
+    <!-- <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div> -->
+
+    <!-- <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div> -->
     <div class="row">
         <div class="col-3">
             <!-- 左方餐點 -->
@@ -190,6 +197,7 @@ provide("cart", cart);
 provide("description", description);
 provide("total", total);
 provide("order", order);
+
 
 
 const addCart = (drink) => {

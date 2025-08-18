@@ -312,6 +312,9 @@ input {
 </style>
 
 <template>
+
+    <Loading />
+
     <div class="container">
         <h1>Week 2 練習</h1>
         <div class="section" v-if="token === '' && hasAccount === false">
@@ -346,6 +349,7 @@ input {
                     <input type="password" v-model="password" id="loginPassword" placeholder="請輸入密碼">
                 </div>
                 <button @click="login">登入</button>
+
                 <button @click="hasAccount = false">沒帳號</button>
             </div>
         </div>
@@ -399,8 +403,10 @@ input {
 
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, provide, computed } from 'vue';
 import { useRouter } from 'vue-router';
+
+import Loading from '../components/isLoadingView.vue'
 
 const router = useRouter();
 
@@ -414,12 +420,18 @@ const todos = ref([])
 const createText = ref("")
 const userData = ref(null)
 
+const isLoading = ref(false)
 
+
+
+provide("isLoading", isLoading);
 
 
 const baseApiUrl = "https://todolist-api.hexschool.io"
 const register = () => {
     console.log("register");
+    isLoading.value = true
+    //
     fetch(baseApiUrl + "/users/sign_up", {
         method: "POST",
         headers: {
@@ -442,8 +454,11 @@ const register = () => {
         } else {
             alert(`註冊失敗${data.message}`)
         }
+        isLoading.value = false
+
     }).catch(e => {
         alert(`註冊失敗`)
+        isLoading.value = false
 
     })
 
@@ -451,6 +466,7 @@ const register = () => {
 
 const login = async () => {
     console.log("login");
+    isLoading.value = true
     const res = await axios.post(baseApiUrl + "/users/sign_in", {
         "email": email.value,
         "password": password.value
@@ -463,11 +479,14 @@ const login = async () => {
 
     // 把token存入cookie 並設定日期
     document.cookie = `token=${token.value}; expires=${new Date(Date.now() + 3600 * 1000).toUTCString()}; path=/`;
+    isLoading.value = false
+    // router.push("/");
 
 }
 
 const logout = async () => {
     console.log("logout");
+    isLoading.value = true
     // 檢查cookie有沒有token
     // const token2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiItT1hYQzBRZUp2c0U0SmlLVzRMTCIsIm5pY2tuYW1lIjoiZXhhbXBsZSIsImlhdCI6MTc1NTA2OTMyMSwiZXhwIjoxNzU1MzI4NTIxfQ.Gaz47oGmBZKhvNW435EhZHbNWlWCLvT8Qb4IuvQSh5A"
     try {
@@ -503,10 +522,14 @@ const logout = async () => {
 
     }
 
+    isLoading.value = false
+
+
 }
 
 const checkOnline = async () => {
     console.log("checkOnline");
+    isLoading.value = true
     try {
         // 檢查cookie有沒有token
         const cookies = document.cookie.split(';')
@@ -530,11 +553,14 @@ const checkOnline = async () => {
         userData.value = res.data
         alert(`${res.data.nickname} 在線上`)
         getAllData();
+        isLoading.value = false
 
     } catch (error) {
         // 跳到其他頁面
         alert("不再線上 即將踢人")
         router.push("/")
+        isLoading.value = false
+
 
     }
 
