@@ -119,7 +119,6 @@ button:hover {
     border: 2px solid #e9ecef;
     border-radius: 10px;
     padding: 1.5rem;
-    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -347,6 +346,7 @@ input {
                     <input type="password" v-model="password" id="loginPassword" placeholder="請輸入密碼">
                 </div>
                 <button @click="login">登入</button>
+                <button @click="hasAccount = false">沒帳號</button>
             </div>
         </div>
         <!-- {{ todos }} -->
@@ -438,6 +438,7 @@ const register = () => {
         // alert("註冊成功")
         if (data.status) {
             alert(`註冊成功 ${data.uid}`)
+            hasAccount.value = true
         } else {
             alert(`註冊失敗${data.message}`)
         }
@@ -472,7 +473,7 @@ const logout = async () => {
     try {
         // 抓不到token也會跳catch
         let tokenCookie = document.cookie.split(';').find(row => row.trim().startsWith('token='));
-         tokenCookie = tokenCookie.split('=')[1];
+        tokenCookie = tokenCookie.split('=')[1];
         console.log("token exists:", tokenCookie);
 
         const res = await axios.post(baseApiUrl + "/users/sign_out", {}, {

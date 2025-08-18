@@ -1,7 +1,8 @@
 <template>
     <hr>
-       <div class="container my-4">
+    <div class="container my-4" v-if="order.cart && order.cart.length > 0">
         <h5 class="mb-3">訂單</h5>
+        <button @click="orderCancel">取消訂單</button>
 
         <!-- 備註與總計 -->
         <div class="mb-3 p-3 bg-light rounded">
@@ -30,6 +31,10 @@
                 </tr>
             </tbody>
         </table>
+
+    </div>
+    <div v-else class="alert alert-warning">
+        購物車目前是空的
     </div>
 </template>
 
@@ -38,7 +43,7 @@
 import { ref, computed, inject } from 'vue';
 // const data = inject("data");
 const order = inject("order"); // 可以直接讀寫父層提供的 ref
-// const addCart = inject("addCart");
+const orderCancel = inject("orderCancel");
 // const drinks = inject("drinks");
 </script>
 

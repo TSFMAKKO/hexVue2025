@@ -29,7 +29,7 @@
         </div>
 
         <!-- 右側購物車 -->
-         <shoppingView />
+        <shoppingView />
 
         <!-- <div class="col-9">
             右方購物車
@@ -99,8 +99,8 @@
     </div> -->
 
     <!-- 下方組件 -->
-     <ordersView />
- 
+    <ordersView />
+
 
 
 </template>
@@ -282,12 +282,16 @@ const delHandler = (id) => {
     })
 }
 
+const orderCancel = () => {
+    order.value = {}
+}
 
-// addCart
+// addCart orderCancel
 provide("addCart", addCart);
 provide("orderHandler", orderHandler);
 provide("changeCount", changeCount);
 provide("delHandler", delHandler);
+provide("orderCancel", orderCancel);
 
 
 </script>

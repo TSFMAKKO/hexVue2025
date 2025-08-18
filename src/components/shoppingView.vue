@@ -4,7 +4,7 @@
             <!-- <h5 class="mb-3">右方購物車</h5> -->
 
             <!-- 購物車表格 -->
-            <table v-if="cart.length !== 0" class="table table-bordered table-striped table-hover">
+            <table v-if="cart && cart.length > 0" class="table table-bordered table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th>品項</th>
@@ -64,7 +64,7 @@ const description = inject("description");
 const changeCount = inject("changeCount"); // 可以直接讀寫父層提供的 ref
 const delHandler = inject("delHandler");
 const orderHandler = inject("orderHandler");
-// const drinks = inject("drinks");
+const total = inject("total");
 // const drinks = inject("drinks");
 
 
