@@ -1,127 +1,239 @@
 <style scoped>
+/* 簡化版待辦事項CSS - 縮減70% */
+
 .container {
     max-width: 600px;
-    margin: 30px auto;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-}
-
-.section {
-    background-color: #f8f9fa;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+/* 標題 */
+.container>h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* 區塊 */
+.section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.section h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* 表單 */
 .form-group {
-    margin-bottom: 20px;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .input-group {
     display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 12px;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-label {
-    display: inline-block;
-    width: 120px;
-    margin-right: 15px;
-    text-align: right;
+.input-group label {
     font-weight: 500;
-    color: #2c3e50;
+    color: #555;
 }
 
-input {
-    flex: 1;
-    padding: 10px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    width: 250px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    background-color: #ffffff;
+.input-group input {
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #ffffff;
+    transition: border-color 0.3s ease;
 }
 
-input:focus {
+.input-group input:focus {
     outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    border-color: #007bff;
 }
 
+/* 按鈕 */
 button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 24px;
+    padding: 0.8rem 1.5rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: 500;
-    font-size: 14px;
-    margin-left: auto;
-    display: block;
+    background: #007bff;
+    color: white;
 }
 
 button:hover {
-    background-color: #45a049;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
-button:active {
-    transform: translateY(0);
+/* 按鈕群組 */
+.btn-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.btn-group button:first-child {
+    grid-column: span 2;
+    background: #28a745;
 }
 
 .logout-btn {
-    background-color: #dc3545;
+    background: #dc3545 !important;
 }
 
-.logout-btn:hover {
-    background-color: #c82333;
+.btn {
+    background: #17a2b8 !important;
 }
 
-h1 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 35px;
-    font-size: 2rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.btn-group input[type="text"] {
+    grid-column: span 2;
+    padding: 0.8rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 1rem;
 }
 
-h2 {
-    color: #34495e;
-    margin-bottom: 20px;
-    padding-left: 15px;
-    border-left: 4px solid #4CAF50;
-    font-size: 1.4rem;
+/* 待辦事項列表 */
+.todo-list {
+    background: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f1f3f4;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.todo-item:hover {
+    background: #e2e6ea;
+    transform: translateX(3px);
+}
+
+.todo-item.completed {
+    opacity: 0.7;
+}
+
+.todo-item.completed input[type="text"] {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+/* 複選框 */
+.todo-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #007bff;
+}
+
+/* 待辦事項輸入框 - 顏色加重 */
+.todo-item input[type="text"] {
+    flex: 1;
+    padding: 0.8rem;
+    border: 2px solid #6c757d;
+    border-radius: 6px;
+    background: #e9ecef;
+    color: #212529;
+    font-size: 1rem;
     font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-.error-message {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 5px;
+.todo-item input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-.success-message {
-    color: #28a745;
-    font-size: 0.875rem;
-    margin-top: 5px;
+/* 刪除按鈕 */
+.todo-item button {
+    background: #dc3545;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 6px;
+}
+
+.todo-item button:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+/* 空狀態 */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .btn-group {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-group button:first-child,
+    .btn-group input[type="text"] {
+        grid-column: span 1;
+    }
+
+    .todo-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .todo-item input[type="checkbox"] {
+        align-self: flex-start;
+    }
 }
 
 input {
-    color: black;
+    border: 2px solid #6c757d;
+    /* 深灰色邊框 */
+    background: #e9ecef;
+    /* 深灰色背景 */
+    color: #212529;
+    /* 深色文字 */
+    font-weight: 500;
+    /* 加粗字體 */
 }
 </style>
 
@@ -162,7 +274,7 @@ input {
                 <button @click="login">登入</button>
             </div>
         </div>
-        {{ todos }}
+        <!-- {{ todos }} -->
         <div class="section btn-group">
             <!-- <h2>驗證是否在線上</h2> -->
             <!-- <div class="form-group">
@@ -179,11 +291,15 @@ input {
         </div>
 
 
-        <template v-for="todo in todos">
-            <input type="checkbox" :checked="todo.status" @click="toggle(todo.id, $event)">
-            <input type="text" :value="todo.content" @keypress.enter="updateText(todo.id, $event)">
-            <button type="button" @click="deleteHandler(todo.id)">刪除</button>
-        </template>
+        <div class="todo-list">
+            <div v-for="todo in todos" :key="todo.id" class="todo-item">
+                <input type="checkbox" :checked="todo.status" @click.prevent="toggle(todo.id, $event)">
+                <!-- 點兩下進入編輯 -->
+                <span v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
+                <input v-else type="text" :value="todo.content" @keypress.prevent.enter="updateText(todo.id, $event)">
+                <button type="button" @click="deleteHandler(todo.id)">刪除</button>
+            </div>
+        </div>
 
 
         <!-- <div class="section">
@@ -369,26 +485,31 @@ const toggle = async (id, event) => {
             }
         })
 
+        // 更新成功
+        let status = null
         todos.value.map(todo => {
             if (todo.id === id) {
                 todo.status = !todo.status
+                status = todo.status
             }
             return todo
         })
 
+        // event.target.checked = status
+
         console.log(res.data);
     } catch (error) {
         // 更新失敗把值回寫
-        let status = null
-        todos.value.forEach(todo => {
-            if (todo.id === id) {
-                status = todo.status
-            }
-        })
-        console.log("status", status);
+        // let status = null
+        // todos.value.forEach(todo => {
+        //     if (todo.id === id) {
+        //         status = todo.status
+        //     }
+        // })
+        // console.log("status", status);
 
         // 把值回寫
-        event.target.checked = status
+        // event.target.checked = status
     }
 
 
@@ -414,26 +535,31 @@ const updateText = async (id, event) => {
                 "Authorization": `${token.value}`
             }
         })
+
         if (res.status) {
+            // 假如更新成功
             todos.value.map(todo => {
                 if (todo.id === id) {
                     todo.content = newContent
+                    todo.isEdit = false
+
                 }
                 return todo
             })
         }
+        event.target.value = newContent
         console.log(res.data);
 
     } catch (error) {
         // 假如更新失敗 
-        let content = ""
-        todos.value.forEach(todo => {
-            if (todo.id === id) {
-                content = todo.content
-            }
-        })
+        // let content = ""
+        // todos.value.forEach(todo => {
+        //     if (todo.id === id) {
+        //         content = todo.content
+        //     }
+        // })
         // 把值回寫
-        event.target.value = content
+        // event.target.value = content
     }
 
     // 
@@ -443,6 +569,7 @@ const updateText = async (id, event) => {
 
 
     console.log(todos.value);
+    
 
     // todos.value = res.data.data
 }
@@ -480,6 +607,7 @@ const deleteHandler = async (id) => {
             }
         })
 
+        // 成功後刪除
         todos.value = todos.value.filter(todo => {
             if (todo.id != id) {
                 return todo
