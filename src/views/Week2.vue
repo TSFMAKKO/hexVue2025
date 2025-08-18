@@ -265,12 +265,57 @@ input {
     /* 可選，換顏色 */
 
 }
+
+.createData {
+    display: flex;
+    gap: 10px;
+    margin: 1.5rem 0;
+}
+
+.createData input {
+    flex-grow: 1;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 0.8rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.createData input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.createData button {
+    background: #28a745;
+    padding: 0.8rem 1.5rem;
+    flex-shrink: 0;
+}
+
+.createData button:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.nickname {
+    /* background-color: #e9ecef; */
+    color: #495057;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    /* border: 2px solid #dee2e6; */
+}
 </style>
 
 <template>
     <div class="container">
         <h1>Week 2 練習</h1>
-        <div class="section">
+        <div class="section" v-if="token === '' && hasAccount === false">
             <h2>註冊</h2>
             <div class="form-group">
                 <div class="input-group">
@@ -286,10 +331,11 @@ input {
                     <input type="text" v-model="nickname" id="nickname" placeholder="請再次輸入密碼">
                 </div>
                 <button @click="register">註冊</button>
+                <button @click="hasAccount = true">已有帳號</button>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section" v-if="token === '' && hasAccount === true">
             <h2>登入</h2>
             <div class="form-group">
                 <div class="input-group">
@@ -304,23 +350,29 @@ input {
             </div>
         </div>
         <!-- {{ todos }} -->
-        <div class="section btn-group">
+
+        <div class="section btn-group" v-if="token && userData === null">
             <!-- <h2>驗證是否在線上</h2> -->
             <!-- <div class="form-group">
                 <div class="input-group"> -->
             <!-- <label for="token">Token:</label> -->
             <!-- <input type="text" id="token" placeholder="驗證 Token"> -->
             <!-- </div> -->
-            <button @click="checkOnline">驗證是否在線上(一定要按)</button>
-            <button @click="logout" class="logout-btn">登出</button>
-            <button @click="getAllData" class="btn">取得所有資料</button>
-            <input type="text" v-model="createText" @keypress.enter="createData" placeholder="新增資料">
+            <input type="text" v-model="token">
+            <button @click="checkOnline">驗證是否在線上</button>
+
             <!-- getAllData -->
             <!-- </div> -->
         </div>
 
 
-        <div class="todo-list">
+        <div class="todo-list" v-if="token && userData !== null">
+            <div class="nickname">{{ userData.nickname }} 你好</div>
+            <button @click="logout" class="logout-btn">登出</button>
+            <!-- <button @click="getAllData" class="btn">取得所有資料</button> -->
+            <div class="createData">
+                <input type="text" v-model="createText" @keypress.enter="createData" placeholder="新增資料">
+            </div>
             <div v-for="todo in todos" :key="todo.id" class="todo-item">
                 <input type="checkbox" :checked="todo.status" @click.prevent="toggle(todo.id, $event)">
                 <!-- 點兩下進入編輯 -->
@@ -355,9 +407,12 @@ const router = useRouter();
 const email = ref("example333@gmail.com")
 const password = ref("example")
 const nickname = ref("example333")
+const hasAccount = ref(false)
+
 const token = ref("")
 const todos = ref([])
 const createText = ref("")
+const userData = ref(null)
 
 
 
@@ -401,12 +456,12 @@ const login = async () => {
     })
 
     console.log("res:", res.data);
-    const token = res.data.token
-    console.log(token);
+    token.value = res.data.token
+    console.log(token.value);
     alert(`${res.data.nickname} 登入成功`)
 
     // 把token存入cookie 並設定日期
-    document.cookie = `token=${token}; expires=${new Date(Date.now() + 3600 * 1000).toUTCString()}; path=/`;
+    document.cookie = `token=${token.value}; expires=${new Date(Date.now() + 3600 * 1000).toUTCString()}; path=/`;
 
 }
 
@@ -416,20 +471,25 @@ const logout = async () => {
     // const token2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiItT1hYQzBRZUp2c0U0SmlLVzRMTCIsIm5pY2tuYW1lIjoiZXhhbXBsZSIsImlhdCI6MTc1NTA2OTMyMSwiZXhwIjoxNzU1MzI4NTIxfQ.Gaz47oGmBZKhvNW435EhZHbNWlWCLvT8Qb4IuvQSh5A"
     try {
         // 抓不到token也會跳catch
-        const tokenCookie = document.cookie.split(';').find(row => row.trim().startsWith('token='));
-        const token = tokenCookie.split('=')[1];
-        console.log("token exists:", token);
+        let tokenCookie = document.cookie.split(';').find(row => row.trim().startsWith('token='));
+         tokenCookie = tokenCookie.split('=')[1];
+        console.log("token exists:", tokenCookie);
 
         const res = await axios.post(baseApiUrl + "/users/sign_out", {}, {
             headers: {
-                "Authorization": `${token}`
+                "Authorization": `${tokenCookie}`
             }
         })
         // console.log(res);
         console.log("res.data:", res.data);
         // 登出成功後清除 cookie
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        router.push("/");
+        // router.push("/");
+
+        // 清空暫存
+        token.value = ""
+        userData.value = null
+        alert(`成功登出 ${res.data.message}`)
 
     } catch (error) {
         alert(`登出失敗${error.data}`)
@@ -440,13 +500,8 @@ const logout = async () => {
         // router.push("/");
         // }
 
-
     }
 
-    // 刪除cookie
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-    // 刪除 ref的token
-    token.value = "";
 }
 
 const checkOnline = async () => {
@@ -455,6 +510,7 @@ const checkOnline = async () => {
         // 檢查cookie有沒有token
         const cookies = document.cookie.split(';')
         console.log("cookies:", cookies);
+        // 
         token.value = cookies.find(row => row.trim().startsWith('token=')).split('=')[1];
         // token.value = token
 
@@ -469,8 +525,11 @@ const checkOnline = async () => {
         })
 
 
-        console.log(res);
+        console.log(res.data);
+        userData.value = res.data
         alert(`${res.data.nickname} 在線上`)
+        getAllData();
+
     } catch (error) {
         // 跳到其他頁面
         alert("不再線上 即將踢人")
