@@ -27,6 +27,16 @@ const routes = [
     name: 'Week2',
     component: () => import('../views/Week2.vue')
   },
+    {
+    path: '/Week3',
+    name: 'Week3',
+    component: () => import('../views/Week3.vue')
+  },
+    {
+    path: '/Week4',
+    name: 'Week4',
+    component: () => import('../views/Week4.vue')
+  },
   {
     path: '/debug',
     name: 'debug',
@@ -37,7 +47,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(), // 👈 用 hash 模式
+  history: createWebHashHistory('hexVue2025'), // 👈 用 hash 模式
   // history: createWebHistory('/hexVue2025/'),
   routes
 })

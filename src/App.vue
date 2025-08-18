@@ -8,9 +8,13 @@
     <nav>
       <router-link to="/">Home</router-link>
       <router-link to="/bmi">Bmi</router-link>
-      <router-link to="/Week1-1">Week1-1</router-link>
-      <router-link to="/Week1-2">Week1-2</router-link>
-      <router-link to="/Week2">Week2</router-link>
+      <!-- <router-link to="/Week1-1">Week1-1</router-link> -->
+      <router-link to="/Week1-2">Week1-餐點管理</router-link>
+      <router-link to="/Week2">Week2-todolist api</router-link>
+      
+      <router-link to="/Week3">Week3- </router-link>
+      
+      <router-link to="/Week4">Week4- </router-link>
     </nav>
     <router-view></router-view>
  
