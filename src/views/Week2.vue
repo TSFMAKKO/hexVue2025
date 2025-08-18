@@ -258,7 +258,12 @@ input {
 }
 
 .del {
-  text-decoration: line-through;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    /* 粗一點 */
+    /* text-decoration-color: red; */
+    /* 可選，換顏色 */
+
 }
 </style>
 
@@ -321,12 +326,13 @@ input {
                 <input type="checkbox" :checked="todo.status" @click.prevent="toggle(todo.id, $event)">
                 <!-- 點兩下進入編輯 -->
                 <div class="content">
-                    <span :class="{del: todo.status }" v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
+                    <span :class="{ del: todo.status }" v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{
+                        todo.content }}</span>
                     <input v-else type="text" :value="todo.content"
                         @keypress.prevent.enter="updateText(todo.id, $event)" @keydown.esc="todo.isEdit = false">
                 </div>
-                <button type="button" @click="todo.isEdit = false">取消</button>
-                <button type="button" @click="deleteHandler(todo.id)">刪除</button>
+                <button type="button" v-if="todo.isEdit" @click="todo.isEdit = false">取消</button>
+                <button type="button" v-else @click="deleteHandler(todo.id)">刪除</button>
             </div>
         </div>
 
@@ -625,6 +631,7 @@ const createData = async () => {
 }
 
 const deleteHandler = async (id) => {
+    if (!confirm("確認刪除")) return
     console.log("id:", id);
     const api = `${baseApiUrl}/todos/${id}`
     console.log(api);
