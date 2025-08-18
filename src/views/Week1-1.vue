@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>作業</h1>
     <table>
       <thead>
@@ -44,9 +44,14 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .hidden {
   display: none;
+}
+
+table{
+  width: 90%;
+  margin: 0 auto;
 }
 </style>
 <script setup>

@@ -43,9 +43,14 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .hidden {
   display: none;
+}
+
+table{
+  width: 90%;
+  margin: 0 auto;
 }
 </style>
 <script setup>

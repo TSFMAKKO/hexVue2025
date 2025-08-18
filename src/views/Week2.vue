@@ -125,6 +125,7 @@ button:hover {
 
 .todo-item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
@@ -190,6 +191,22 @@ button:hover {
     transform: scale(1.05);
 }
 
+
+.todo-list .content {
+    max-width: 100%;
+    width: 100%;
+    color: black;
+}
+
+.todo-list .content span {
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    /* text-align: left; */
+}
+
+
+
 /* 空狀態 */
 .empty-state {
     text-align: center;
@@ -234,6 +251,10 @@ input {
     /* 深色文字 */
     font-weight: 500;
     /* 加粗字體 */
+}
+
+.todo-item button{
+    min-width: 80px;
 }
 </style>
 
@@ -295,8 +316,11 @@ input {
             <div v-for="todo in todos" :key="todo.id" class="todo-item">
                 <input type="checkbox" :checked="todo.status" @click.prevent="toggle(todo.id, $event)">
                 <!-- 點兩下進入編輯 -->
-                <span v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
-                <input v-else type="text" :value="todo.content" @keypress.prevent.enter="updateText(todo.id, $event)">
+                <div class="content">
+                    <span v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
+                    <input v-else type="text" :value="todo.content"
+                        @keypress.prevent.enter="updateText(todo.id, $event)">
+                </div>
                 <button type="button" @click="deleteHandler(todo.id)">刪除</button>
             </div>
         </div>
@@ -569,7 +593,7 @@ const updateText = async (id, event) => {
 
 
     console.log(todos.value);
-    
+
 
     // todos.value = res.data.data
 }
