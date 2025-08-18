@@ -270,7 +270,6 @@ input {
 <template>
     <div class="container">
         <h1>Week 2 練習</h1>
-
         <div class="section">
             <h2>註冊</h2>
             <div class="form-group">
@@ -446,6 +445,8 @@ const logout = async () => {
 
     // 刪除cookie
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    // 刪除 ref的token
+    token.value = "";
 }
 
 const checkOnline = async () => {
