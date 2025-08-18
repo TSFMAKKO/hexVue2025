@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import home from '../views/Home.vue'
 import bmi from '../views/Bmi.vue'
 const routes = [
@@ -33,11 +33,12 @@ const routes = [
     component: () => import('../views/debug.vue')
   },
   { path: '/:catchAll(.*)', redirect: '/' } // 加這行防止 404
- 
+
 ]
 
 const router = createRouter({
-  history: createWebHistory('/hexVue2025/'),
+  history: createWebHashHistory(), // 👈 用 hash 模式
+  // history: createWebHistory('/hexVue2025/'),
   routes
 })
 
