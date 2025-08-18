@@ -321,6 +321,7 @@ input {
                     <input v-else type="text" :value="todo.content"
                         @keypress.prevent.enter="updateText(todo.id, $event)" @keydown.esc="todo.isEdit = false">
                 </div>
+                <button type="button" @click="todo.isEdit = false">取消</button>
                 <button type="button" @click="deleteHandler(todo.id)">刪除</button>
             </div>
         </div>
