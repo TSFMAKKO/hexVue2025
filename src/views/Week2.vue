@@ -256,6 +256,10 @@ input {
 .todo-item button {
     min-width: 80px;
 }
+
+.del {
+  text-decoration: line-through;
+}
 </style>
 
 <template>
@@ -306,7 +310,7 @@ input {
             <button @click="checkOnline">驗證是否在線上(一定要按)</button>
             <button @click="logout" class="logout-btn">登出</button>
             <button @click="getAllData" class="btn">取得所有資料</button>
-            新增資料: <input type="text" v-model="createText" @keypress.enter="createData">
+            <input type="text" v-model="createText" @keypress.enter="createData" placeholder="新增資料">
             <!-- getAllData -->
             <!-- </div> -->
         </div>
@@ -317,7 +321,7 @@ input {
                 <input type="checkbox" :checked="todo.status" @click.prevent="toggle(todo.id, $event)">
                 <!-- 點兩下進入編輯 -->
                 <div class="content">
-                    <span v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
+                    <span :class="{del: todo.status }" v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
                     <input v-else type="text" :value="todo.content"
                         @keypress.prevent.enter="updateText(todo.id, $event)" @keydown.esc="todo.isEdit = false">
                 </div>
