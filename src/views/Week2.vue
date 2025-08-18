@@ -253,7 +253,7 @@ input {
     /* 加粗字體 */
 }
 
-.todo-item button{
+.todo-item button {
     min-width: 80px;
 }
 </style>
@@ -319,7 +319,7 @@ input {
                 <div class="content">
                     <span v-if="!todo.isEdit" @dblclick="todo.isEdit = true">{{ todo.content }}</span>
                     <input v-else type="text" :value="todo.content"
-                        @keypress.prevent.enter="updateText(todo.id, $event)">
+                        @keypress.prevent.enter="updateText(todo.id, $event)" @keydown.esc="todo.isEdit = false">
                 </div>
                 <button type="button" @click="deleteHandler(todo.id)">刪除</button>
             </div>
