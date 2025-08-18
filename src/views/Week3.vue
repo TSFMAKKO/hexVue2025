@@ -2,7 +2,9 @@
 <template>
     <h3>餐點購買</h3>
     <div class="row">
-        <div class="col-3">左方餐點
+        <div class="col-3">
+            <!-- 左方餐點 -->
+            <drinksView />
             <!-- <ul>
                 <li v-for="drink in data" @click="addCart(drink)">
                     {{ drink }}
@@ -13,8 +15,8 @@
                 <div>{{ drink.description }}</div>
                 <div>{{ drink.price }}</div>
             </div> -->
-            <ul class="list-group">
-                <li v-for="drink in data" :key="drink.id" class="list-group-item list-group-item-action"
+            <!-- <ul class="list-group">
+                <li v-for="drink in drinks" :key="drink.id" class="list-group-item list-group-item-action"
                     @click="addCart(drink)" style="cursor: pointer;">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{ drink.name }}</h5>
@@ -22,72 +24,13 @@
                     </div>
                     <p class="mb-1">{{ drink.description }}</p>
                 </li>
-            </ul>
+            </ul> -->
 
         </div>
 
-  <div class="col-9">
-    <h5 class="mb-3">右方購物車</h5>
+        <!-- 右側購物車 -->
+         <shoppingView />
 
-    <!-- 購物車表格 -->
-    <table v-if="cart.length !== 0" class="table table-bordered table-striped table-hover">
-      <thead class="table-dark">
-        <tr>
-          <th>品項</th>
-          <th>描述</th>
-          <th>售價</th>
-          <th>數量</th>
-          <th>小記</th>
-          <th>刪除</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="drink in cart" :key="drink.id">
-          <td>{{ drink.name }}</td>
-          <td>{{ drink.description }}</td>
-          <td>${{ drink.price }}</td>
-          <td>
-            <select
-              class="form-select form-select-sm w-auto"
-              @change="changeCount($event, drink.id)"
-              v-model="drink.count"
-            >
-              <option v-for="n in 10" :key="n" :value="n">
-                {{ n }}
-              </option>
-            </select>
-          </td>
-          <td>${{ drink.price * drink.count }}</td>
-          <td>
-            <button class="btn btn-sm btn-danger" @click="delHandler(drink.id)">
-              刪除
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- 空購物車提示 -->
-    <div v-else class="alert alert-warning">
-      購物車目前是空的
-    </div>
-
-    <!-- 總計與備註 -->
-    <div class="mt-3 d-flex justify-content-between align-items-center">
-      <div><strong>總計:</strong> ${{ total }}</div>
-      <div>
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          placeholder="備註"
-          v-model="description"
-        >
-      </div>
-      <button class="btn btn-primary btn-sm" @click="orderHandler">
-        結帳
-      </button>
-    </div>
-  </div>        
         <!-- <div class="col-9">
             右方購物車
             <table v-if="cart.length !== 0">
@@ -154,43 +97,19 @@
             </tbody>
         </table>
     </div> -->
-    <div class="container my-4">
-        <h5 class="mb-3">下方訂單</h5>
 
-        <!-- 備註與總計 -->
-        <div class="mb-3 p-3 bg-light rounded">
-            <p class="mb-1"><strong>備註:</strong> {{ order.description }}</p>
-            <p class="mb-0"><strong>總計:</strong> ${{ order.total }}</p>
-        </div>
-
-        <!-- 訂單表格 -->
-        <table class="table table-bordered table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>品項</th>
-                    <th>描述</th>
-                    <th>售價</th>
-                    <th>數量</th>
-                    <th>小記</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="drink in order.cart" :key="drink.id">
-                    <td>{{ drink.name }}</td>
-                    <td>{{ drink.description }}</td>
-                    <td>${{ drink.price }}</td>
-                    <td>{{ drink.count }}</td>
-                    <td>${{ drink.price * drink.count }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <!-- 下方組件 -->
+     <ordersView />
+ 
 
 
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, provide } from 'vue';
+import drinksView from '../components/drinksView.vue'
+import ordersView from '../components/ordersView.vue'
+import shoppingView from '../components/shoppingView.vue'
 
 const data = [
     {
@@ -263,6 +182,15 @@ const total = computed(() => {
 
 // 下方訂單
 const order = ref({});
+
+
+provide("drinks", drinks);
+
+provide("cart", cart);
+provide("description", description);
+provide("total", total);
+provide("order", order);
+
 
 const addCart = (drink) => {
     // drink = JSON.parse(JSON.stringify(drink))
@@ -353,4 +281,13 @@ const delHandler = (id) => {
         }
     })
 }
+
+
+// addCart
+provide("addCart", addCart);
+provide("orderHandler", orderHandler);
+provide("changeCount", changeCount);
+provide("delHandler", delHandler);
+
+
 </script>
