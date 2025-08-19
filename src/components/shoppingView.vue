@@ -1,9 +1,11 @@
 <template>
-<!-- <span>右側購物車</span> -->
-         <div class="col-9">
-            <!-- <h5 class="mb-3">右方購物車</h5> -->
+    <!-- <span>右側購物車</span> -->
+    <div class="col-9">
+        <!-- <h5 class="mb-3">右方購物車</h5> -->
 
-            <!-- 購物車表格 -->
+        <!-- 購物車表格 -->
+        <!-- 動畫 -->
+        <transition-group name="collapse" tag="div">
             <table v-if="cart && cart.length > 0" class="table table-bordered table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -42,18 +44,18 @@
             <div v-else class="alert alert-warning">
                 購物車目前是空的
             </div>
-
-            <!-- 總計與備註 -->
-            <div class="mt-3 d-flex justify-content-between align-items-center">
-                <div><strong>總計:</strong> ${{ total }}</div>
-                <div>
-                    <input type="text" class="form-control form-control-sm" placeholder="備註" v-model="description">
-                </div>
-                <button class="btn btn-primary btn-sm" @click="orderHandler">
-                    結帳
-                </button>
+        </transition-group>
+        <!-- 總計與備註 -->
+        <div class="mt-3 d-flex justify-content-between align-items-center">
+            <div><strong>總計:</strong> ${{ total }}</div>
+            <div>
+                <input type="text" class="form-control form-control-sm" placeholder="備註" v-model="description">
             </div>
+            <button class="btn btn-primary btn-sm" @click="orderHandler">
+                結帳
+            </button>
         </div>
+    </div>
 </template>
 
 <script setup>
@@ -71,6 +73,4 @@ const total = inject("total");
 </script>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -308,29 +308,7 @@ input {
 }
 
 
-/* 進出動畫 */
-.collapse-enter-active,
-.collapse-leave-active {
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
 
-/* 初始狀態 / 離開結束狀態 */
-.collapse-enter-from,
-.collapse-leave-to {
-  max-height: 0;
-  opacity: 0;
-  margin: 0;
-  padding: 0;
-}
-
-/* 結束狀態 / 離開初始狀態 */
-.collapse-enter-to,
-.collapse-leave-from {
-  max-height: 200px;
-  /* 依你 todo-item 的實際高度調整 */
-  opacity: 1;
-}
 
 .todo-item {
   /* max-height: 0px; */
@@ -416,7 +394,7 @@ input {
       <div class="createData">
         <input type="text" v-model="createText" @keypress.enter="createData" placeholder="新增資料" />
       </div>
-      <!--  -->
+      <!-- 動畫 -->
       <transition-group name="collapse" tag="div">
         <div v-for="todo in todos" :key="todo.id" class="todo-item">
           <input type="checkbox" :checked="todo.status" @click.prevent="toggle(todo.id, $event)" />

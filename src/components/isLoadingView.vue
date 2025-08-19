@@ -1,51 +1,62 @@
+<template>
+  <!-- 全螢幕 Loading 遮罩 -->
+  <div v-if="isLoading" id="loading-overlay" class="d-flex justify-content-center align-items-center">
+    <div class="wave-loading">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</template>
+
 <style scoped>
 #loading-overlay {
-    position: fixed;
-    /* 全螢幕固定 */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    /* 全螢幕寬 */
-    height: 100vh;
-    /* 全螢幕高 */
-    background: rgba(0, 0, 0, 0.7);
-    /* 半透明背景 */
-    z-index: 9999;
-    /* 蓋在最上層 */
-    backdrop-filter: blur(2px);
-    /* 背景模糊 */
-    -webkit-backdrop-filter: blur(2px);
-    /* Safari 相容 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;   /* 全螢幕寬 */
+  height: 100vh;  /* 全螢幕高 */
+  background: rgba(0, 0, 0, 0.7); /* 半透明黑底 */
+  z-index: 9999;  /* 蓋在最上層 */
+  backdrop-filter: blur(2px);      /* 背景模糊 */
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* 波浪容器 */
+.wave-loading {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 50px;
+}
+
+/* 六條波浪 */
+.wave-loading span {
+  display: block;
+  width: 6px;
+  height: 100%;
+  background: #28a745; /* 綠色 */
+  border-radius: 3px;
+  animation: wave 1.2s infinite ease-in-out;
+}
+
+/* 六條依序延遲 */
+.wave-loading span:nth-child(1) { animation-delay: 0s; }
+.wave-loading span:nth-child(2) { animation-delay: 0.1s; }
+.wave-loading span:nth-child(3) { animation-delay: 0.2s; }
+.wave-loading span:nth-child(4) { animation-delay: 0.3s; }
+.wave-loading span:nth-child(5) { animation-delay: 0.4s; }
+.wave-loading span:nth-child(6) { animation-delay: 0.5s; }
+
+/* 動畫關鍵幀 */
+@keyframes wave {
+  0%, 40%, 100% { transform: scaleY(0.3); }
+  20% { transform: scaleY(1); }
 }
 </style>
-<template>
-    <!-- 全螢幕 Loading 遮罩 -->
-    <div v-if="isLoading" id="loading-overlay" class="d-flex justify-content-center align-items-center">
-        <div class="spinner-border text-success" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-
-    <!-- 全螢幕載入器 -->
-    <!-- <div class="fullscreen-loader" id="fullscreenLoader">
-        <div class="loading-text">載入中...</div>
-        <div class="loading-subtext">請稍候，正在準備內容</div>
-        
-        <div class="sk-wave-large">
-            <div class="sk-rect sk-rect1"></div>
-            <div class="sk-rect sk-rect2"></div>
-            <div class="sk-rect sk-rect3"></div>
-            <div class="sk-rect sk-rect4"></div>
-            <div class="sk-rect sk-rect5"></div>
-            <div class="sk-rect sk-rect6"></div>
-        </div>
-
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="progress-text" id="progressText">0%</div>
-    </div> -->
-</template>
 
 <script setup>
 // isLoading

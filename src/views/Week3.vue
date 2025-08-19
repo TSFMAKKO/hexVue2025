@@ -108,7 +108,7 @@
     <!-- 下方組件 -->
     <ordersView />
 
-
+    <isLoadingView />
 
 </template>
 
@@ -117,6 +117,8 @@ import { ref, computed, provide } from 'vue';
 import drinksView from '../components/drinksView.vue'
 import ordersView from '../components/ordersView.vue'
 import shoppingView from '../components/shoppingView.vue'
+
+import isLoadingView from '../components/isLoadingView.vue'
 
 const data = [
     {
@@ -191,6 +193,8 @@ const total = computed(() => {
 // 下方訂單
 const order = ref({});
 
+const isLoading = ref(false)
+
 
 provide("drinks", drinks);
 
@@ -199,7 +203,7 @@ provide("description", description);
 provide("total", total);
 provide("order", order);
 
-
+provide("isLoading", isLoading);
 
 const addCart = (drink) => {
     // drink = JSON.parse(JSON.stringify(drink))
