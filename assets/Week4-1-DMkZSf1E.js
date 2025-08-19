@@ -1,1 +1,0 @@
-import{_ as n,c as r,a as s,F as t,o as a}from"./index-Dy08Nfhw.js";const o={};function l(c,e){return a(),r(t,null,[e[0]||(e[0]=s("h2",null,"week4-1",-1)),e[1]||(e[1]=s("div",{class:"spinner-border text-success",role:"status"},[s("span",{class:"visually-hidden"},"Loading...")],-1))],64)}const i=n(o,[["render",l]]);export{i as default};
