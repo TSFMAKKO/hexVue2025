@@ -327,7 +327,8 @@ input {
 /* 結束狀態 / 離開初始狀態 */
 .collapse-enter-to,
 .collapse-leave-from {
-  max-height: 200px; /* 依你 todo-item 的實際高度調整 */
+  max-height: 200px;
+  /* 依你 todo-item 的實際高度調整 */
   opacity: 1;
 }
 
@@ -632,7 +633,16 @@ const getAllData = async () => {
   });
 
   console.log(res.data);
-  todos.value = res.data.data;
+  res.data.data.forEach((todo, i) => {
+    // todo.isEdit = false;
+    setTimeout(() => {
+      // todo.isEdit = false;
+      console.log("todo:", todo)
+
+      todos.value.push(todo);
+    }, 200 * i);
+  });
+  // todos.value = res.data.data;
 };
 
 // getAllData()
@@ -777,12 +787,12 @@ const deleteHandler = async (id, event) => {
 
     // event.target.closest(".todo-item").classList.add("disable");
 
-      // 成功後刪除
-      todos.value = todos.value.filter((todo) => {
-        if (todo.id != id) {
-          return todo;
-        }
-      });
+    // 成功後刪除
+    todos.value = todos.value.filter((todo) => {
+      if (todo.id != id) {
+        return todo;
+      }
+    });
 
 
     console.log(res.data);
