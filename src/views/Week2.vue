@@ -434,7 +434,7 @@ import axios from "axios";
 import { ref, provide, computed } from "vue";
 import { useRouter } from "vue-router";
 
-import Loading from "../components/isLoadingView.vue";
+import Loading from "../components/isLoading2View.vue";
 
 const router = useRouter();
 

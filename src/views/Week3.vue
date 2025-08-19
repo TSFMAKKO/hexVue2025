@@ -118,7 +118,7 @@ import drinksView from '../components/drinksView.vue'
 import ordersView from '../components/ordersView.vue'
 import shoppingView from '../components/shoppingView.vue'
 
-import isLoadingView from '../components/isLoadingView.vue'
+import isLoadingView from '../components/isLoading2View.vue'
 
 const data = [
     {
