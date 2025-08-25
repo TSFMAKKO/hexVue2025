@@ -492,15 +492,23 @@ const register = () => {
 const login = async () => {
   console.log("login");
   isLoading.value = true;
-  const res = await axios.post(baseApiUrl + "/users/sign_in", {
-    email: email.value,
-    password: password.value,
-  });
+  try {
+    const res = await axios.post(baseApiUrl + "/users/sign_in", {
+      email: email.value,
+      password: password.value,
+    });
 
-  console.log("res:", res.data);
-  token.value = res.data.token;
-  console.log(token.value);
-  alert(`${res.data.nickname} 登入成功`);
+    console.log("res:", res.data);
+    token.value = res.data.token;
+    console.log(token.value);
+    alert(`${res.data.nickname} 登入成功`);
+  } catch (error) {
+    alert(`登入失敗${error.response.data.message}`);
+    console.log("登入失敗", error);
+    isLoading.value = false;
+    return;
+  }
+
 
   // 把token存入cookie 並設定日期
   document.cookie = `token=${token.value}; expires=${new Date(
